@@ -80,7 +80,7 @@ namespace RB.Server
             controller.Move(_moveDirection);
 
             NetworkManager.instance.serverSend.PlayerPosition(this);
-            NetworkManager.instance.serverSend.PlayerRotation(this);
+            //NetworkManager.instance.serverSend.PlayerRotation(this);
         }
 
         /// <summary>Updates the player input with newly received input.</summary>

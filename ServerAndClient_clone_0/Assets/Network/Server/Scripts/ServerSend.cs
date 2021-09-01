@@ -89,15 +89,15 @@ namespace RB.Server
 
         /// <summary>Sends a player's updated rotation to all clients except to himself (to avoid overwriting the local player's rotation).</summary>
         /// <param name="_player">The player whose rotation to update.</param>
-        public void PlayerRotation(PlayerData _player)
-        {
-            using (Packet _packet = new Packet((int)ServerPackets.playerRotation))
-            {
-                _packet.Write(_player.id);
-                _packet.Write(_player.transform.rotation);
-
-                SendUDPDataToAll(_player.id, _packet);
-            }
-        }
+        //public void PlayerRotation(PlayerData _player)
+        //{
+        //    using (Packet _packet = new Packet((int)ServerPackets.playerRotation))
+        //    {
+        //        _packet.Write(_player.id);
+        //        _packet.Write(_player.transform.rotation);
+        //
+        //        SendUDPDataToAll(_player.id, _packet);
+        //    }
+        //}
     }
 }

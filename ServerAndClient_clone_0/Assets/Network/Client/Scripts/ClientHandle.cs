@@ -33,18 +33,22 @@ namespace RB.Client
 
         public static void PlayerPosition(Packet _packet)
         {
-            int _id = _packet.ReadInt();
-            Vector3 _position = _packet.ReadVector3();
+            int id = _packet.ReadInt();
+            
 
-            GameManager.players[_id].transform.position = _position;
+            if (GameManager.players.ContainsKey(id))
+            {
+                Vector3 position = _packet.ReadVector3();
+                GameManager.players[id].transform.position = position;
+            }
         }
 
-        public static void PlayerRotation(Packet _packet)
-        {
-            int _id = _packet.ReadInt();
-            Quaternion _rotation = _packet.ReadQuaternion();
-
-            GameManager.players[_id].transform.rotation = _rotation;
-        }
+        //public static void PlayerRotation(Packet _packet)
+        //{
+        //    int _id = _packet.ReadInt();
+        //    Quaternion _rotation = _packet.ReadQuaternion();
+        //
+        //    GameManager.players[_id].transform.rotation = _rotation;
+        //}
     }
 }
