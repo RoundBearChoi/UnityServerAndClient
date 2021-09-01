@@ -14,13 +14,13 @@ namespace RB.Server
         public static int dataBufferSize = 4096;
 
         [SerializeField]
-        bool[] _inputs;
-
-        [SerializeField]
         int _id;
 
         [SerializeField]
         string _name;
+
+        [SerializeField]
+        bool[] _inputs;
 
         public PlayerData playerData;
         public TCP tcp;
