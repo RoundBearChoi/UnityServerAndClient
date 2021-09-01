@@ -13,16 +13,24 @@ namespace RB.Server
     {
         public static int dataBufferSize = 4096;
 
-        public int id;
+        [SerializeField]
+        bool[] _inputs;
+
+        [SerializeField]
+        int _id;
+
+        [SerializeField]
+        string _name;
+
         public PlayerData playerData;
         public TCP tcp;
         public UDP udp;
 
         public ClientData(int _clientId)
         {
-            id = _clientId;
-            tcp = new TCP(id);
-            udp = new UDP(id);
+            _id = _clientId;
+            tcp = new TCP(_id);
+            udp = new UDP(_id);
         }
 
         public class TCP
@@ -217,16 +225,16 @@ namespace RB.Server
         public void SendIntoGame(string _playerName)
         {
             playerData = NetworkManager.instance.InstantiatePlayer();
-            playerData.Initialize(id, _playerName);
+            playerData.Initialize(_id, _playerName);
 
             // Send all players to the new player
             for (int i = 0; i < NetworkManager.instance.server.connectedClients.Length; i++)
             {
                 if (NetworkManager.instance.server.connectedClients[i].playerData != null)
                 {
-                    if (NetworkManager.instance.server.connectedClients[i].id != id)
+                    if (NetworkManager.instance.server.connectedClients[i]._id != _id)
                     {
-                        NetworkManager.instance.serverSend.SpawnPlayer(id, NetworkManager.instance.server.connectedClients[i].playerData);
+                        NetworkManager.instance.serverSend.SpawnPlayer(_id, NetworkManager.instance.server.connectedClients[i].playerData);
                     }
                 }
             }
@@ -236,7 +244,7 @@ namespace RB.Server
             {
                 if (NetworkManager.instance.server.connectedClients[i].playerData != null)
                 {
-                    NetworkManager.instance.serverSend.SpawnPlayer(NetworkManager.instance.server.connectedClients[i].id, playerData);
+                    NetworkManager.instance.serverSend.SpawnPlayer(NetworkManager.instance.server.connectedClients[i]._id, playerData);
                 }
             }
         }
@@ -254,6 +262,16 @@ namespace RB.Server
 
             tcp.Disconnect();
             udp.Disconnect();
+        }
+
+        public void SetInput(bool[] inputs)
+        {
+            _inputs = inputs;
+        }
+
+        public void SetUserName(string name)
+        {
+            _name = name;
         }
     }
 }

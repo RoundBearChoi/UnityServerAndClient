@@ -13,25 +13,29 @@ namespace RB.Server
             string _username = _packet.ReadString();
 
             Debug.Log($"{NetworkManager.instance.server.connectedClients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully and is now player {_fromClient}.");
+            
             if (_fromClient != _clientIdCheck)
             {
                 Debug.Log($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
             }
+
             NetworkManager.instance.server.connectedClients[_fromClient].SendIntoGame(_username);
+            NetworkManager.instance.server.connectedClients[_fromClient].SetUserName(_username);
         }
 
-        public static void PlayerMovement(int _fromClient, Packet _packet)
+        public static void PlayerMovement(int fromClient, Packet packet)
         {
-            bool[] _inputs = new bool[_packet.ReadInt()];
+            bool[] inputs = new bool[packet.ReadInt()];
 
-            for (int i = 0; i < _inputs.Length; i++)
+            for (int i = 0; i < inputs.Length; i++)
             {
-                _inputs[i] = _packet.ReadBool();
+                inputs[i] = packet.ReadBool();
             }
 
-            Quaternion _rotation = _packet.ReadQuaternion();
+            Quaternion _rotation = packet.ReadQuaternion();
 
-            NetworkManager.instance.server.connectedClients[_fromClient].playerData.SetInput(_inputs, _rotation);
+            NetworkManager.instance.server.connectedClients[fromClient].playerData.SetInput(inputs, _rotation);
+            NetworkManager.instance.server.connectedClients[fromClient].SetInput(inputs);
         }
     }
 }
