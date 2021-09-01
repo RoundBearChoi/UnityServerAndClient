@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RB.Server
 {
     [System.Serializable]
-    public class Player : MonoBehaviour
+    public class PlayerData : MonoBehaviour
     {
         public int id;
         public string username;
@@ -38,6 +38,7 @@ namespace RB.Server
         public void FixedUpdate()
         {
             Vector2 _inputDirection = Vector2.zero;
+
             if (inputs[0])
             {
                 _inputDirection.y += 1;

@@ -61,7 +61,7 @@ namespace RB.Server
         /// <summary>Tells a client to spawn a player.</summary>
         /// <param name="_toClient">The client that should spawn the player.</param>
         /// <param name="_player">The player to spawn.</param>
-        public void SpawnPlayer(int _toClient, Player _player)
+        public void SpawnPlayer(int _toClient, PlayerData _player)
         {
             using (Packet _packet = new Packet((int)ServerPackets.spawnPlayer))
             {
@@ -76,7 +76,7 @@ namespace RB.Server
 
         /// <summary>Sends a player's updated position to all clients.</summary>
         /// <param name="_player">The player whose position to update.</param>
-        public void PlayerPosition(Player _player)
+        public void PlayerPosition(PlayerData _player)
         {
             using (Packet _packet = new Packet((int)ServerPackets.playerPosition))
             {
@@ -89,7 +89,7 @@ namespace RB.Server
 
         /// <summary>Sends a player's updated rotation to all clients except to himself (to avoid overwriting the local player's rotation).</summary>
         /// <param name="_player">The player whose rotation to update.</param>
-        public void PlayerRotation(Player _player)
+        public void PlayerRotation(PlayerData _player)
         {
             using (Packet _packet = new Packet((int)ServerPackets.playerRotation))
             {

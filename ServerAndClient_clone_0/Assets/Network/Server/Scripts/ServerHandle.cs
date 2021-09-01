@@ -31,7 +31,7 @@ namespace RB.Server
 
             Quaternion _rotation = _packet.ReadQuaternion();
 
-            NetworkManager.instance.server.connectedClients[_fromClient].player.SetInput(_inputs, _rotation);
+            NetworkManager.instance.server.connectedClients[_fromClient].playerData.SetInput(_inputs, _rotation);
         }
     }
 }
