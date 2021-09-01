@@ -82,7 +82,7 @@ namespace RB.Server
                     int _byteLength = stream.EndRead(_result);
                     if (_byteLength <= 0)
                     {
-                        NetworkManager.instance.server.clients[id].Disconnect();
+                        NetworkManager.instance.server.connectedClients[id].Disconnect();
                         return;
                     }
 
@@ -95,7 +95,7 @@ namespace RB.Server
                 catch (Exception _ex)
                 {
                     Debug.Log($"Error receiving TCP data: {_ex}");
-                    NetworkManager.instance.server.clients[id].Disconnect();
+                    NetworkManager.instance.server.connectedClients[id].Disconnect();
                 }
             }
 
@@ -220,23 +220,23 @@ namespace RB.Server
             player.Initialize(id, _playerName);
 
             // Send all players to the new player
-            for (int i = 0; i < NetworkManager.instance.server.clients.Length; i++)
+            for (int i = 0; i < NetworkManager.instance.server.connectedClients.Length; i++)
             {
-                if (NetworkManager.instance.server.clients[i].player != null)
+                if (NetworkManager.instance.server.connectedClients[i].player != null)
                 {
-                    if (NetworkManager.instance.server.clients[i].id != id)
+                    if (NetworkManager.instance.server.connectedClients[i].id != id)
                     {
-                        ServerSend.SpawnPlayer(id, NetworkManager.instance.server.clients[i].player);
+                        ServerSend.SpawnPlayer(id, NetworkManager.instance.server.connectedClients[i].player);
                     }
                 }
             }
             
             // Send the new player to all players (including himself)
-            for (int i = 0; i < NetworkManager.instance.server.clients.Length; i++)
+            for (int i = 0; i < NetworkManager.instance.server.connectedClients.Length; i++)
             {
-                if (NetworkManager.instance.server.clients[i].player != null)
+                if (NetworkManager.instance.server.connectedClients[i].player != null)
                 {
-                    ServerSend.SpawnPlayer(NetworkManager.instance.server.clients[i].id, player);
+                    ServerSend.SpawnPlayer(NetworkManager.instance.server.connectedClients[i].id, player);
                 }
             }
         }

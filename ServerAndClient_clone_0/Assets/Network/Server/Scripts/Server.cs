@@ -11,7 +11,7 @@ namespace RB.Server
     [Serializable]
     public class Server
     {
-        public ClientData[] clients = new ClientData[4];
+        public ClientData[] connectedClients = new ClientData[4];
 
         public int Port { get; private set; }
 
@@ -48,11 +48,11 @@ namespace RB.Server
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
             Debug.Log($"Incoming connection from {_client.Client.RemoteEndPoint}...");
 
-            for (int i = 0; i < clients.Length; i++)
+            for (int i = 0; i < connectedClients.Length; i++)
             {
-                if (clients[i].tcp.socket == null)
+                if (connectedClients[i].tcp.socket == null)
                 {
-                    clients[i].tcp.Connect(_client);
+                    connectedClients[i].tcp.Connect(_client);
                     return;
                 }
             }
@@ -78,17 +78,17 @@ namespace RB.Server
                 {
                     int _clientId = _packet.ReadInt();
 
-                    if (clients[_clientId].udp.endPoint == null)
+                    if (connectedClients[_clientId].udp.endPoint == null)
                     {
                         // If this is a new connection
-                        clients[_clientId].udp.Connect(_clientEndPoint);
+                        connectedClients[_clientId].udp.Connect(_clientEndPoint);
                         return;
                     }
 
-                    if (clients[_clientId].udp.endPoint.ToString() == _clientEndPoint.ToString())
+                    if (connectedClients[_clientId].udp.endPoint.ToString() == _clientEndPoint.ToString())
                     {
                         // Ensures that the client is not being impersonated by another by sending a false clientID
-                        clients[_clientId].udp.HandleData(_packet);
+                        connectedClients[_clientId].udp.HandleData(_packet);
                     }
                 }
             }
@@ -121,7 +121,7 @@ namespace RB.Server
         {
             for (int i = 0; i < 4; i++)
             {
-                clients[i] = new ClientData(i);
+                connectedClients[i] = new ClientData(i);
             }
 
             packetHandlers = new Dictionary<int, PacketHandler>()
