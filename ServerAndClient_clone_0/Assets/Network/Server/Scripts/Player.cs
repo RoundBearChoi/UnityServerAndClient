@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace RB.Server
 {
+    [System.Serializable]
     public class Player : MonoBehaviour
     {
         public int id;

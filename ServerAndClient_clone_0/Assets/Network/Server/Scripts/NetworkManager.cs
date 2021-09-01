@@ -6,11 +6,9 @@ namespace RB.Server
 {
     public class NetworkManager : MonoBehaviour
     {
-        [SerializeField]
-        ClientData[] clients = null;
-
         public static NetworkManager instance;
 
+        public Server server = null;
         public GameObject playerPrefab;
 
         private void Awake()
@@ -31,14 +29,13 @@ namespace RB.Server
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 30;
 
-            Server.Start(26950);
-
-            clients = Server.clients;
+            server = new Server();
+            server.Start(26950);
         }
 
         private void OnApplicationQuit()
         {
-            Server.Stop();
+            server.Stop();
         }
 
         public Player InstantiatePlayer()

@@ -8,7 +8,7 @@ using RB.Network;
 
 namespace RB.Server
 {
-    [System.Serializable]
+    [Serializable]
     public class ClientData
     {
         public static int dataBufferSize = 4096;
@@ -82,7 +82,7 @@ namespace RB.Server
                     int _byteLength = stream.EndRead(_result);
                     if (_byteLength <= 0)
                     {
-                        Server.clients[id].Disconnect();
+                        NetworkManager.instance.server.clients[id].Disconnect();
                         return;
                     }
 
@@ -95,7 +95,7 @@ namespace RB.Server
                 catch (Exception _ex)
                 {
                     Debug.Log($"Error receiving TCP data: {_ex}");
-                    Server.clients[id].Disconnect();
+                    NetworkManager.instance.server.clients[id].Disconnect();
                 }
             }
 
@@ -127,7 +127,7 @@ namespace RB.Server
                         using (Packet _packet = new Packet(_packetBytes))
                         {
                             int _packetId = _packet.ReadInt();
-                            Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                            NetworkManager.instance.server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
                         }
                     });
 
@@ -185,7 +185,7 @@ namespace RB.Server
             /// <param name="_packet">The packet to send.</param>
             public void SendData(Packet _packet)
             {
-                Server.SendUDPData(endPoint, _packet);
+                NetworkManager.instance.server.SendUDPData(endPoint, _packet);
             }
 
             /// <summary>Prepares received data to be used by the appropriate packet handler methods.</summary>
@@ -200,7 +200,7 @@ namespace RB.Server
                     using (Packet _packet = new Packet(_packetBytes))
                     {
                         int _packetId = _packet.ReadInt();
-                        Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                        NetworkManager.instance.server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
                     }
                 });
             }
@@ -220,23 +220,23 @@ namespace RB.Server
             player.Initialize(id, _playerName);
 
             // Send all players to the new player
-            for (int i = 0; i < Server.clients.Length; i++)
+            for (int i = 0; i < NetworkManager.instance.server.clients.Length; i++)
             {
-                if (Server.clients[i].player != null)
+                if (NetworkManager.instance.server.clients[i].player != null)
                 {
-                    if (Server.clients[i].id != id)
+                    if (NetworkManager.instance.server.clients[i].id != id)
                     {
-                        ServerSend.SpawnPlayer(id, Server.clients[i].player);
+                        ServerSend.SpawnPlayer(id, NetworkManager.instance.server.clients[i].player);
                     }
                 }
             }
             
             // Send the new player to all players (including himself)
-            for (int i = 0; i < Server.clients.Length; i++)
+            for (int i = 0; i < NetworkManager.instance.server.clients.Length; i++)
             {
-                if (Server.clients[i].player != null)
+                if (NetworkManager.instance.server.clients[i].player != null)
                 {
-                    ServerSend.SpawnPlayer(Server.clients[i].id, player);
+                    ServerSend.SpawnPlayer(NetworkManager.instance.server.clients[i].id, player);
                 }
             }
         }

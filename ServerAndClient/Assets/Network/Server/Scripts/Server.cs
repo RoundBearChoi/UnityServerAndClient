@@ -8,21 +8,23 @@ using RB.Network;
 
 namespace RB.Server
 {
+    [Serializable]
     public class Server
     {
-        public static ClientData[] clients = new ClientData[4];
+        public ClientData[] clients = new ClientData[4];
 
-        public static int Port { get; private set; }
+        public int Port { get; private set; }
+
         public delegate void PacketHandler(int _fromClient, Packet _packet);
-        public static Dictionary<int, PacketHandler> packetHandlers;
+        public Dictionary<int, PacketHandler> packetHandlers;
 
-        private static TcpListener tcpListener;
-        private static UdpClient udpListener;
+        TcpListener tcpListener;
+        UdpClient udpListener;
 
         /// <summary>Starts the server.</summary>
         /// <param name="_maxPlayers">The maximum players that can be connected simultaneously.</param>
         /// <param name="_port">The port to start the server on.</param>
-        public static void Start(int _port)
+        public void Start(int _port)
         {
             Port = _port;
 
@@ -40,7 +42,7 @@ namespace RB.Server
         }
 
         /// <summary>Handles new TCP connections.</summary>
-        private static void TCPConnectCallback(IAsyncResult _result)
+        private void TCPConnectCallback(IAsyncResult _result)
         {
             TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
@@ -59,7 +61,7 @@ namespace RB.Server
         }
 
         /// <summary>Receives incoming UDP data.</summary>
-        private static void UDPReceiveCallback(IAsyncResult _result)
+        private void UDPReceiveCallback(IAsyncResult _result)
         {
             try
             {
@@ -99,7 +101,7 @@ namespace RB.Server
         /// <summary>Sends a packet to the specified endpoint via UDP.</summary>
         /// <param name="_clientEndPoint">The endpoint to send the packet to.</param>
         /// <param name="_packet">The packet to send.</param>
-        public static void SendUDPData(IPEndPoint _clientEndPoint, Packet _packet)
+        public void SendUDPData(IPEndPoint _clientEndPoint, Packet _packet)
         {
             try
             {
@@ -115,7 +117,7 @@ namespace RB.Server
         }
 
         /// <summary>Initializes all necessary server data.</summary>
-        private static void InitializeServerData()
+        private void InitializeServerData()
         {
             for (int i = 0; i < 4; i++)
             {
@@ -130,7 +132,7 @@ namespace RB.Server
             Debug.Log("Initialized packets.");
         }
 
-        public static void Stop()
+        public void Stop()
         {
             tcpListener.Stop();
             udpListener.Close();
