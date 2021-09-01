@@ -9,6 +9,10 @@ namespace RB.Server
         public static NetworkManager instance;
 
         public Server server = null;
+        public ServerSend serverSend = null;
+
+        [Space(10)]
+
         public GameObject playerPrefab;
 
         private void Awake()
@@ -31,6 +35,8 @@ namespace RB.Server
 
             server = new Server();
             server.Start(26950);
+
+            serverSend = new ServerSend();
         }
 
         private void OnApplicationQuit()

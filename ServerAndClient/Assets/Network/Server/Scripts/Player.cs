@@ -14,7 +14,9 @@ namespace RB.Server
         public float moveSpeed = 5f;
         public float jumpSpeed = 5f;
 
+        [SerializeField]
         private bool[] inputs;
+
         private float yVelocity = 0;
 
         private void Start()
@@ -76,8 +78,8 @@ namespace RB.Server
             _moveDirection.y = yVelocity;
             controller.Move(_moveDirection);
 
-            ServerSend.PlayerPosition(this);
-            ServerSend.PlayerRotation(this);
+            NetworkManager.instance.serverSend.PlayerPosition(this);
+            NetworkManager.instance.serverSend.PlayerRotation(this);
         }
 
         /// <summary>Updates the player input with newly received input.</summary>

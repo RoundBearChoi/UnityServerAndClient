@@ -54,7 +54,7 @@ namespace RB.Server
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
-                ServerSend.Welcome(id, "Welcome to the server!");
+                NetworkManager.instance.serverSend.Welcome(id, "Welcome to the server!");
             }
 
             /// <summary>Sends data to the client via TCP.</summary>
@@ -226,7 +226,7 @@ namespace RB.Server
                 {
                     if (NetworkManager.instance.server.connectedClients[i].id != id)
                     {
-                        ServerSend.SpawnPlayer(id, NetworkManager.instance.server.connectedClients[i].player);
+                        NetworkManager.instance.serverSend.SpawnPlayer(id, NetworkManager.instance.server.connectedClients[i].player);
                     }
                 }
             }
@@ -236,7 +236,7 @@ namespace RB.Server
             {
                 if (NetworkManager.instance.server.connectedClients[i].player != null)
                 {
-                    ServerSend.SpawnPlayer(NetworkManager.instance.server.connectedClients[i].id, player);
+                    NetworkManager.instance.serverSend.SpawnPlayer(NetworkManager.instance.server.connectedClients[i].id, player);
                 }
             }
         }
