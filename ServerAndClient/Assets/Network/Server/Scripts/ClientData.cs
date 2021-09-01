@@ -231,17 +231,6 @@ namespace RB.Server
                 }
             }
             
-            //foreach (ClientData _client in Server.clients.Values)
-            //{
-            //    if (_client.player != null)
-            //    {
-            //        if (_client.id != id)
-            //        {
-            //            ServerSend.SpawnPlayer(id, _client.player);
-            //        }
-            //    }
-            //}
-
             // Send the new player to all players (including himself)
             for (int i = 0; i < Server.clients.Length; i++)
             {
@@ -250,14 +239,6 @@ namespace RB.Server
                     ServerSend.SpawnPlayer(Server.clients[i].id, player);
                 }
             }
-
-            //foreach (ClientData _client in Server.clients.Values)
-            //{
-            //    if (_client.player != null)
-            //    {
-            //        ServerSend.SpawnPlayer(_client.id, player);
-            //    }
-            //}
         }
 
         /// <summary>Disconnects the client and stops all network traffic.</summary>

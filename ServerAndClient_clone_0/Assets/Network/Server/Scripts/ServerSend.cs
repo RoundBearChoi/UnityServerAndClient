@@ -16,54 +16,6 @@ namespace RB.Server
             Server.clients[_toClient].tcp.SendData(_packet);
         }
 
-        /// <summary>Sends a packet to a client via UDP.</summary>
-        /// <param name="_toClient">The client to send the packet the packet to.</param>
-        /// <param name="_packet">The packet to send to the client.</param>
-        private static void SendUDPData(int _toClient, Packet _packet)
-        {
-            _packet.WriteLength();
-            Server.clients[_toClient].udp.SendData(_packet);
-        }
-
-        /// <summary>Sends a packet to all clients via TCP.</summary>
-        /// <param name="_packet">The packet to send.</param>
-        private static void SendTCPDataToAll(Packet _packet)
-        {
-            _packet.WriteLength();
-            for(int i = 0; i < Server.clients.Length; i++)
-            {
-                Server.clients[i].tcp.SendData(_packet);
-            }
-
-            //for (int i = 1; i <= Server.MaxPlayers; i++)
-            //{
-            //    Server.clients[i].tcp.SendData(_packet);
-            //}
-        }
-        /// <summary>Sends a packet to all clients except one via TCP.</summary>
-        /// <param name="_exceptClient">The client to NOT send the data to.</param>
-        /// <param name="_packet">The packet to send.</param>
-        private static void SendTCPDataToAll(int _exceptClient, Packet _packet)
-        {
-            _packet.WriteLength();
-
-            for (int i = 0; i < Server.clients.Length; i++)
-            {
-                if (i != _exceptClient)
-                {
-                    Server.clients[i].tcp.SendData(_packet);
-                }
-            }
-
-            //for (int i = 1; i <= Server.MaxPlayers; i++)
-            //{
-            //    if (i != _exceptClient)
-            //    {
-            //        Server.clients[i].tcp.SendData(_packet);
-            //    }
-            //}
-        }
-
         /// <summary>Sends a packet to all clients via UDP.</summary>
         /// <param name="_packet">The packet to send.</param>
         private static void SendUDPDataToAll(Packet _packet)
@@ -74,12 +26,8 @@ namespace RB.Server
             {
                 Server.clients[i].udp.SendData(_packet);
             }
-
-            //for (int i = 1; i <= Server.MaxPlayers; i++)
-            //{
-            //    Server.clients[i].udp.SendData(_packet);
-            //}
         }
+
         /// <summary>Sends a packet to all clients except one via UDP.</summary>
         /// <param name="_exceptClient">The client to NOT send the data to.</param>
         /// <param name="_packet">The packet to send.</param>
@@ -94,17 +42,8 @@ namespace RB.Server
                     Server.clients[i].udp.SendData(_packet);
                 }
             }
-
-            //for (int i = 1; i <= Server.MaxPlayers; i++)
-            //{
-            //    if (i != _exceptClient)
-            //    {
-            //        Server.clients[i].udp.SendData(_packet);
-            //    }
-            //}
         }
 
-        #region Packets
         /// <summary>Sends a welcome message to the given client.</summary>
         /// <param name="_toClient">The client to send the packet to.</param>
         /// <param name="_msg">The message to send.</param>
@@ -160,6 +99,5 @@ namespace RB.Server
                 SendUDPDataToAll(_player.id, _packet);
             }
         }
-        #endregion
     }
 }

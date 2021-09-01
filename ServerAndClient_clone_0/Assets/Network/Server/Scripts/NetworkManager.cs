@@ -31,7 +31,7 @@ namespace RB.Server
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 30;
 
-            Server.Start(/*50,*/ 26950);
+            Server.Start(26950);
 
             clients = Server.clients;
         }

@@ -11,8 +11,6 @@ namespace RB.Server
     public class Server
     {
         public static ClientData[] clients = new ClientData[4];
-        //public static Dictionary<int, ClientData> clients = new Dictionary<int, ClientData>();
-        //public static int MaxPlayers { get; private set; }
 
         public static int Port { get; private set; }
         public delegate void PacketHandler(int _fromClient, Packet _packet);
@@ -24,9 +22,8 @@ namespace RB.Server
         /// <summary>Starts the server.</summary>
         /// <param name="_maxPlayers">The maximum players that can be connected simultaneously.</param>
         /// <param name="_port">The port to start the server on.</param>
-        public static void Start(/*int _maxPlayers,*/ int _port)
+        public static void Start(int _port)
         {
-            //MaxPlayers = _maxPlayers;
             Port = _port;
 
             Debug.Log("Starting server...");
@@ -58,15 +55,6 @@ namespace RB.Server
                 }
             }
 
-            //for (int i = 1; i <= MaxPlayers; i++)
-            //{
-            //    if (clients[i].tcp.socket == null)
-            //    {
-            //        clients[i].tcp.Connect(_client);
-            //        return;
-            //    }
-            //}
-
             Debug.Log($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
         }
 
@@ -87,11 +75,6 @@ namespace RB.Server
                 using (Packet _packet = new Packet(_data))
                 {
                     int _clientId = _packet.ReadInt();
-
-                    //if (_clientId == 0)
-                    //{
-                    //    return;
-                    //}
 
                     if (clients[_clientId].udp.endPoint == null)
                     {
@@ -138,11 +121,6 @@ namespace RB.Server
             {
                 clients[i] = new ClientData(i);
             }
-
-            //for (int i = 1; i <= MaxPlayers; i++)
-            //{
-            //    clients.Add(i, new ClientData(i));
-            //}
 
             packetHandlers = new Dictionary<int, PacketHandler>()
         {
