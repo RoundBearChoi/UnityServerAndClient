@@ -8,6 +8,7 @@ using RB.Network;
 
 namespace RB.Server
 {
+    [System.Serializable]
     public class ClientData
     {
         public static int dataBufferSize = 4096;
@@ -219,25 +220,44 @@ namespace RB.Server
             player.Initialize(id, _playerName);
 
             // Send all players to the new player
-            foreach (ClientData _client in Server.clients.Values)
+            for (int i = 0; i < Server.clients.Length; i++)
             {
-                if (_client.player != null)
+                if (Server.clients[i].player != null)
                 {
-                    if (_client.id != id)
+                    if (Server.clients[i].id != id)
                     {
-                        ServerSend.SpawnPlayer(id, _client.player);
+                        ServerSend.SpawnPlayer(id, Server.clients[i].player);
                     }
                 }
             }
+            
+            //foreach (ClientData _client in Server.clients.Values)
+            //{
+            //    if (_client.player != null)
+            //    {
+            //        if (_client.id != id)
+            //        {
+            //            ServerSend.SpawnPlayer(id, _client.player);
+            //        }
+            //    }
+            //}
 
             // Send the new player to all players (including himself)
-            foreach (ClientData _client in Server.clients.Values)
+            for (int i = 0; i < Server.clients.Length; i++)
             {
-                if (_client.player != null)
+                if (Server.clients[i].player != null)
                 {
-                    ServerSend.SpawnPlayer(_client.id, player);
+                    ServerSend.SpawnPlayer(Server.clients[i].id, player);
                 }
             }
+
+            //foreach (ClientData _client in Server.clients.Values)
+            //{
+            //    if (_client.player != null)
+            //    {
+            //        ServerSend.SpawnPlayer(_client.id, player);
+            //    }
+            //}
         }
 
         /// <summary>Disconnects the client and stops all network traffic.</summary>

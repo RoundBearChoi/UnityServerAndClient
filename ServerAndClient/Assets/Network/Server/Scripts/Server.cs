@@ -10,9 +10,11 @@ namespace RB.Server
 {
     public class Server
     {
-        public static int MaxPlayers { get; private set; }
+        public static ClientData[] clients = new ClientData[4];
+        //public static Dictionary<int, ClientData> clients = new Dictionary<int, ClientData>();
+        //public static int MaxPlayers { get; private set; }
+
         public static int Port { get; private set; }
-        public static Dictionary<int, ClientData> clients = new Dictionary<int, ClientData>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
         public static Dictionary<int, PacketHandler> packetHandlers;
 
@@ -22,9 +24,9 @@ namespace RB.Server
         /// <summary>Starts the server.</summary>
         /// <param name="_maxPlayers">The maximum players that can be connected simultaneously.</param>
         /// <param name="_port">The port to start the server on.</param>
-        public static void Start(int _maxPlayers, int _port)
+        public static void Start(/*int _maxPlayers,*/ int _port)
         {
-            MaxPlayers = _maxPlayers;
+            //MaxPlayers = _maxPlayers;
             Port = _port;
 
             Debug.Log("Starting server...");
@@ -47,7 +49,7 @@ namespace RB.Server
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
             Debug.Log($"Incoming connection from {_client.Client.RemoteEndPoint}...");
 
-            for (int i = 1; i <= MaxPlayers; i++)
+            for (int i = 0; i < clients.Length; i++)
             {
                 if (clients[i].tcp.socket == null)
                 {
@@ -55,6 +57,15 @@ namespace RB.Server
                     return;
                 }
             }
+
+            //for (int i = 1; i <= MaxPlayers; i++)
+            //{
+            //    if (clients[i].tcp.socket == null)
+            //    {
+            //        clients[i].tcp.Connect(_client);
+            //        return;
+            //    }
+            //}
 
             Debug.Log($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
         }
@@ -77,10 +88,10 @@ namespace RB.Server
                 {
                     int _clientId = _packet.ReadInt();
 
-                    if (_clientId == 0)
-                    {
-                        return;
-                    }
+                    //if (_clientId == 0)
+                    //{
+                    //    return;
+                    //}
 
                     if (clients[_clientId].udp.endPoint == null)
                     {
@@ -123,10 +134,15 @@ namespace RB.Server
         /// <summary>Initializes all necessary server data.</summary>
         private static void InitializeServerData()
         {
-            for (int i = 1; i <= MaxPlayers; i++)
+            for (int i = 0; i < 4; i++)
             {
-                clients.Add(i, new ClientData(i));
+                clients[i] = new ClientData(i);
             }
+
+            //for (int i = 1; i <= MaxPlayers; i++)
+            //{
+            //    clients.Add(i, new ClientData(i));
+            //}
 
             packetHandlers = new Dictionary<int, PacketHandler>()
         {
